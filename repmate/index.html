@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RepMate — AIコーチ付きの筋トレ記録アプリ</title>
+<meta name="description" content="AIがあなたのトレーニングを分析し、次の一歩を提案する筋トレ記録アプリ。重量推移・部位バランス・PR検出ですべての成長を可視化。">
+<meta property="og:title" content="RepMate">
+<meta property="og:description" content="AIコーチ付きの筋トレ記録アプリ">
+<meta property="og:image" content="https://rui-gihu.github.io/polaris-apps-legal/repmate/assets/icon.png">
+<style>
+  :root {
+    color-scheme: light dark;
+    --accent: #ff7a30;
+    --accent-soft: #ff913a;
+    --bg: #ffffff;
+    --bg-soft: #f7f7f9;
+    --text: #1a1a1a;
+    --text-soft: #555;
+    --text-muted: #888;
+    --border: #e8e8ec;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d0d0d;
+      --bg-soft: #1a1a1a;
+      --text: #f0f0f0;
+      --text-soft: #b8b8b8;
+      --text-muted: #888;
+      --border: #2a2a2a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Helvetica Neue", sans-serif;
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .hero {
+    background: linear-gradient(160deg, var(--accent) 0%, var(--accent-soft) 100%);
+    padding: 80px 24px 100px;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(255,255,255,.15), transparent 50%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; max-width: 720px; margin: 0 auto; }
+  .hero img.icon {
+    width: 120px; height: 120px;
+    border-radius: 27px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.2);
+    margin-bottom: 28px;
+  }
+  .hero h1 { font-size: 48px; font-weight: 800; margin: 0 0 12px; letter-spacing: -0.02em; }
+  .hero .tagline { font-size: 19px; opacity: 0.95; margin: 0 0 32px; font-weight: 500; }
+  .badges { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .badge {
+    background: rgba(255,255,255,.18);
+    backdrop-filter: blur(10px);
+    padding: 8px 16px; border-radius: 100px;
+    font-size: 13px; font-weight: 600;
+  }
+
+  .section { max-width: 1080px; margin: 0 auto; padding: 80px 24px; }
+  .section h2 { font-size: 32px; text-align: center; margin: 0 0 16px; letter-spacing: -0.01em; }
+  .section .subtitle { text-align: center; color: var(--text-muted); font-size: 15px; margin-bottom: 56px; }
+
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+  .feature {
+    background: var(--bg-soft);
+    padding: 28px 24px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+  .feature .icon-circle {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(255,122,48,.12);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+    font-size: 22px;
+  }
+  .feature h3 { font-size: 17px; margin: 0 0 8px; }
+  .feature p { font-size: 14px; color: var(--text-soft); margin: 0; line-height: 1.7; }
+
+  .screenshots {
+    display: flex; gap: 20px;
+    overflow-x: auto;
+    padding: 8px 24px 32px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -24px;
+  }
+  .screenshots::-webkit-scrollbar { height: 8px; }
+  .screenshots::-webkit-scrollbar-thumb { background: var(--border); border-radius: 100px; }
+  .screenshot { flex: 0 0 240px; scroll-snap-align: center; text-align: center; }
+  .screenshot img {
+    width: 240px;
+    border-radius: 28px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.12);
+    border: 6px solid #1a1a1a;
+  }
+  @media (prefers-color-scheme: dark) {
+    .screenshot img { border-color: #444; }
+  }
+  .screenshot .label { margin-top: 12px; font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+  .premium {
+    background: var(--bg-soft);
+    border-radius: 24px;
+    padding: 48px 32px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .premium h3 { font-size: 24px; margin: 0 0 8px; }
+  .premium .crown { font-size: 36px; margin-bottom: 12px; }
+  .premium ul {
+    text-align: left;
+    max-width: 360px;
+    margin: 24px auto 0;
+    padding: 0;
+    list-style: none;
+    font-size: 14px;
+  }
+  .premium li { padding: 8px 0; color: var(--text-soft); }
+  .premium li::before { content: "✓"; color: var(--accent); font-weight: bold; margin-right: 12px; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  footer .links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 60px 20px 80px; }
+    .hero h1 { font-size: 36px; }
+    .hero .tagline { font-size: 16px; }
+    .section { padding: 60px 20px; }
+    .section h2 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-content">
+    <img src="assets/icon.png" alt="RepMate" class="icon">
+    <h1>RepMate</h1>
+    <p class="tagline">AIコーチがあなたの成長を支える、<br>筋トレ記録アプリ</p>
+    <div class="badges">
+      <span class="badge">🏋️ シンプル記録</span>
+      <span class="badge">🤖 AIコーチング</span>
+      <span class="badge">📈 成長を可視化</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>主な機能</h2>
+  <p class="subtitle">続けやすさを徹底的に追求しました</p>
+  <div class="features">
+
+    <div class="feature">
+      <div class="icon-circle">🏋️</div>
+      <h3>ワークアウト記録</h3>
+      <p>種目・重量・回数・セットをワンタップ感覚で。前回の記録を自動表示するから入力は最小限。</p>
+    </div>
+
+    <div class="feature">
+      <div class="icon-circle">🤖</div>
+      <h3>AIコーチング</h3>
+      <p>Anthropic Claude による分析で、あなたのトレーニングデータをもとに次の一歩をアドバイス。9カテゴリ60+の質問テンプレと自由質問に対応。</p>
+    </div>
+
+    <div class="feature">
+      <div class="icon-circle">🏆</div>
+      <h3>PR（自己ベスト）検出</h3>
+      <p>セッション完了時に自動で記録更新を判定。達成バッジとハプティクスで成長を実感。</p>
+    </div>
+
+    <div class="feature">
+      <div class="icon-circle">📊</div>
+      <h3>分析グラフ</h3>
+      <p>種目別の重量推移、体重トレンド、部位バランス、ボリューム推移など、すべての成長を可視化。</p>
+    </div>
+
+    <div class="feature">
+      <div class="icon-circle">⏱️</div>
+      <h3>レストタイマー</h3>
+      <p>プリセット秒数でワンタップ起動。バックグラウンドでも通知で終了を知らせる。</p>
+    </div>
+
+    <div class="feature">
+      <div class="icon-circle">🔥</div>
+      <h3>連続記録カウント</h3>
+      <p>Duolingo風の連続トレーニング日数で、毎日続けるモチベーションを維持。</p>
+    </div>
+
+    <div class="feature">
+      <div class="icon-circle">📋</div>
+      <h3>テンプレート</h3>
+      <p>定番ルーティンを保存してワンタップで呼び出し。「胸の日」「脚の日」を一瞬で。</p>
+    </div>
+
+    <div class="feature">
+      <div class="icon-circle">🎯</div>
+      <h3>目標トラッキング</h3>
+      <p>目標体重・体脂肪率を設定して進捗をビジュアル表示。あと何キロかが一目でわかる。</p>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" style="padding-top: 0;">
+  <h2>画面イメージ</h2>
+  <p class="subtitle">スワイプして全画面を見る</p>
+  <div class="screenshots">
+    <div class="screenshot"><img src="assets/01-home.png" alt="ホーム"><div class="label">ホーム</div></div>
+    <div class="screenshot"><img src="assets/02-record.png" alt="記録"><div class="label">記録</div></div>
+    <div class="screenshot"><img src="assets/07-history-detail.png" alt="セッション詳細"><div class="label">セッション詳細</div></div>
+    <div class="screenshot"><img src="assets/04-analysis.png" alt="分析"><div class="label">分析</div></div>
+    <div class="screenshot"><img src="assets/05-mypage.png" alt="マイページ"><div class="label">マイページ・目標</div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="premium">
+    <div class="crown">👑</div>
+    <h3>RepMate Premium</h3>
+    <p style="color: var(--text-soft); font-size: 14px;">すべての機能を解放</p>
+    <ul>
+      <li>AIコーチング無制限</li>
+      <li>全期間の分析グラフ閲覧</li>
+      <li>部位バランス分析</li>
+      <li>ボリューム推移分析</li>
+      <li>無制限のテンプレート保存</li>
+    </ul>
+    <p style="margin-top: 32px; font-size: 13px; color: var(--text-muted);">
+      無料プランは AI コーチング 月3回まで・テンプレート3件まで。<br>
+      Premium は ¥480/月 または ¥4,400/年（約3ヶ月分お得）。
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="links">
+    <a href="privacy.html">プライバシーポリシー</a>
+    <a href="terms.html">利用規約</a>
+  </div>
+  <div>© 2026 RepMate</div>
+</footer>
+
+</body>
+</html>
